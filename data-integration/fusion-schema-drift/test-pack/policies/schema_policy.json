@@ -1,0 +1,32 @@
+{
+  "required_column_patterns": [
+    ".*_ID$",
+    "^LAST_UPDATE_DATE$",
+    "^CREATION_DATE$"
+  ],
+  "critical_type_transitions": [
+    "number->string",
+    "date->string",
+    "timestamp->string",
+    "boolean->string"
+  ],
+  "high_type_transitions": [
+    "string->number",
+    "string->date"
+  ],
+  "default_severity": {
+    "object_removed": "high",
+    "object_added": "medium",
+    "column_added": "low",
+    "column_removed": "high",
+    "column_type_changed": "high",
+    "column_nullability_relaxed": "medium"
+  },
+  "target_contract": {
+    "missing_object": "critical",
+    "missing_required_column": "critical",
+    "type_mismatch": "critical",
+    "nullable_conflict": "high",
+    "extra_column": "info"
+  }
+}

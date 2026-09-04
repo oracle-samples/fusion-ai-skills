@@ -1,0 +1,311 @@
+{
+  "workbook": "Business_Object_Views_to_BICC_Database_Mapping_26B.xlsx",
+  "version": "26B",
+  "requested_pvos": [
+    "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO"
+  ],
+  "found_count": 1,
+  "not_found_count": 0,
+  "mappings": [
+    {
+      "version": "26B",
+      "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+      "pillar": "Scm",
+      "business_view_label": "Cost Accounting Distributions",
+      "business_view_name": "costDistributionExtract",
+      "match_type": "exact",
+      "column_count": 32,
+      "columns": [
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOAccountedFlag",
+          "business_view_column": "accountingStatus",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "ACCOUNTED_FLAG",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOAdditionalProcessingCode",
+          "business_view_column": "additionalProcessingCode",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "ADDITIONAL_PROCESSING_CODE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOBaseCurrencyCode",
+          "business_view_column": "currency.currencyCode",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "BASE_CURRENCY_CODE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOCostBookId",
+          "business_view_column": "costBook.id",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "COST_BOOK_ID",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOCostOrganizationId",
+          "business_view_column": "costOrganization.id",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "COST_ORGANIZATION_ID",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOCostTransactionType",
+          "business_view_column": "costTransactionType",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "COST_TRANSACTION_TYPE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOCostTransactionUom",
+          "business_view_column": "unitOfMeasure.code",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "COST_TRANSACTION_UOM",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOCreatedBy",
+          "business_view_column": "createdBy",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "CREATED_BY",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOCreationDate",
+          "business_view_column": "timeCreated",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "CREATION_DATE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEODepTrxnId",
+          "business_view_column": "Not in business view",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "DEP_TRXN_ID",
+          "notes": "not in business view"
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEODistributionId",
+          "business_view_column": "id",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "DISTRIBUTION_ID",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOEffDate",
+          "business_view_column": "effectiveDate",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "EFF_DATE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOEffDateChar",
+          "business_view_column": "effectiveDateCharacter",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "EFF_DATE_CHAR",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOEntityCode",
+          "business_view_column": "subledgerAccountingEventType.entityCode",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "ENTITY_CODE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOEntityCode",
+          "business_view_column": "subledgerAccountingEventClass.entityCode",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "ENTITY_CODE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOEventClassCode",
+          "business_view_column": "subledgerAccountingEventType.eventClassCode",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "EVENT_CLASS_CODE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOEventClassCode",
+          "business_view_column": "subledgerAccountingEventClass.eventClassCode",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "EVENT_CLASS_CODE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOEventId",
+          "business_view_column": "subledgerAccountingEvent.eventId",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "EVENT_ID",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOEventTypeCode",
+          "business_view_column": "subledgerAccountingEventType.eventTypeCode",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "EVENT_TYPE_CODE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOGlDate",
+          "business_view_column": "generalLedgerDate",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "GL_DATE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOGrossMarginFlag",
+          "business_view_column": "grossMarginStatus",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "GROSS_MARGIN_FLAG",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOLastUpdatedBy",
+          "business_view_column": "updatedBy",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "LAST_UPDATED_BY",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOLastUpdateDate",
+          "business_view_column": "timeUpdated",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "LAST_UPDATE_DATE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOLayerQuantity",
+          "business_view_column": "layerQuantity",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "LAYER_QUANTITY",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOLedgerId",
+          "business_view_column": "ledger.ledgerId",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "LEDGER_ID",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOLegalEntityId",
+          "business_view_column": "legalEntity.legalEntityId",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "LEGAL_ENTITY_ID",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOPeriodName",
+          "business_view_column": "Not in business view",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "PERIOD_NAME",
+          "notes": "not in business view"
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOPjcTxnStatusCode",
+          "business_view_column": "projectTransactionStatus",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "PJC_TXN_STATUS_CODE",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEORecTrxnId",
+          "business_view_column": "Not in business view",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "REC_TRXN_ID",
+          "notes": "not in business view"
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOTransactionId",
+          "business_view_column": "Not in business view",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "TRANSACTION_ID",
+          "notes": "not in business view"
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOTransactionNumber",
+          "business_view_column": "transactionNumber",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "TRANSACTION_NUMBER",
+          "notes": ""
+        },
+        {
+          "pvo": "FscmTopModelAM.ScmExtractAM.CstBiccExtractAM.CostDistributionsExtractPVO",
+          "business_view_name": "costDistributionExtract",
+          "pvo_column": "CostDistributionsPEOValOnhandFlag",
+          "business_view_column": "valuationOnhandStatus",
+          "database_table": "CST_COST_DISTRIBUTIONS",
+          "database_column": "VAL_ONHAND_FLAG",
+          "notes": ""
+        }
+      ]
+    }
+  ],
+  "not_found": []
+}

@@ -1,0 +1,12 @@
+interface:
+  display_name: Fusion Data Extraction Advisor
+  short_description: Choose the right Fusion extraction option by use case
+  icon_small: "./assets/AteamIcon.jpeg"
+  icon_large: "./assets/AteamIcon.jpeg"
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

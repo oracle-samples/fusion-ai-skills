@@ -1,0 +1,15 @@
+{
+  "views": {
+    "costDistributionExtract": {
+      "module": "ora.hcm.payroll",
+      "attributes": [
+        "assignment.assignmentNumber",
+        "costAllocation.accountCode",
+        "costBook.id",
+        "currency.currencyCode",
+        "timeCreated",
+        "timeUpdated"
+      ]
+    }
+  }
+}

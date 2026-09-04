@@ -1,0 +1,27 @@
+{
+  "severity_order": [
+    "critical",
+    "high",
+    "medium",
+    "low",
+    "info"
+  ],
+  "default_release_decision": {
+    "critical": "block",
+    "high": "warn",
+    "medium": "warn",
+    "low": "proceed",
+    "info": "proceed"
+  },
+  "owner_by_drift_type": {
+    "column_removed": "data-transform-owner",
+    "column_type_changed": "data-transform-owner",
+    "type_mismatch": "odt-model-owner",
+    "missing_required_column": "odt-model-owner",
+    "null_ratio_increase": "data-quality-owner",
+    "row_count_drop": "pipeline-operations-owner",
+    "numeric_mean_shift": "analytics-owner",
+    "categorical_domain_shift": "reference-data-owner"
+  },
+  "default_owner": "data-platform-owner"
+}

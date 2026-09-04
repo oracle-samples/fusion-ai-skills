@@ -1,0 +1,55 @@
+{
+  "overall_status": "green",
+  "metrics": {
+    "task_success_rate": 1.0,
+    "first_pass_acceptance_rate": 0.7083333333333334,
+    "coverage_rate": 0.9444444444444444,
+    "implementation_coverage_rate": 0.9880952380952381,
+    "fusion_fidelity_rate": 0.9770114942528736,
+    "hallucination_rate": 0.0028735632183908046,
+    "p95_latency_ms": 2650.0,
+    "avg_iteration_count": 1.6666666666666667,
+    "accepted_per_1k_tokens": 0.6,
+    "consistency_rate": 1.0,
+    "sample_size": 24,
+    "repeat_sample_size": 8
+  },
+  "gate_results": {
+    "task_success_rate": {
+      "status": "pass",
+      "operator": ">=",
+      "threshold": 0.9,
+      "value": 1.0
+    },
+    "fusion_fidelity_rate": {
+      "status": "pass",
+      "operator": ">=",
+      "threshold": 0.95,
+      "value": 0.9770114942528736
+    },
+    "implementation_coverage_rate": {
+      "status": "pass",
+      "operator": ">=",
+      "threshold": 0.95,
+      "value": 0.9880952380952381
+    },
+    "hallucination_rate": {
+      "status": "pass",
+      "operator": "<=",
+      "threshold": 0.02,
+      "value": 0.0028735632183908046
+    },
+    "p95_latency_ms": {
+      "status": "pass",
+      "operator": "<=",
+      "threshold": 3000.0,
+      "value": 2650.0
+    },
+    "avg_iteration_count": {
+      "status": "pass",
+      "operator": "<=",
+      "threshold": 2.0,
+      "value": 1.6666666666666667
+    }
+  }
+}

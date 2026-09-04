@@ -1,0 +1,66 @@
+{
+  "thresholds": {
+    "task_success_rate_min": 0.9,
+    "fusion_fidelity_rate_min": 0.95,
+    "implementation_coverage_rate_min": 0.95,
+    "hallucination_rate_max": 0.02,
+    "p95_latency_ms_max": 3000,
+    "avg_iteration_count_max": 2.0
+  },
+  "prompt_runs": [
+    {
+      "run_id": "run-001",
+      "successful": true,
+      "first_pass_accepted": true,
+      "accepted_artifact": true,
+      "sections_present": 10,
+      "sections_required": 10,
+      "implementation_pillars_covered": 7,
+      "implementation_pillars_required": 7,
+      "verified_claims": 24,
+      "total_claims": 24,
+      "unsupported_claims": 0,
+      "latency_ms": 1850,
+      "iterations": 1,
+      "generated_tokens": 1400,
+      "is_repeat_case": true,
+      "consistent": true
+    },
+    {
+      "run_id": "run-002",
+      "successful": true,
+      "first_pass_accepted": false,
+      "accepted_artifact": true,
+      "sections_present": 9,
+      "sections_required": 10,
+      "implementation_pillars_covered": 6,
+      "implementation_pillars_required": 7,
+      "verified_claims": 20,
+      "total_claims": 21,
+      "unsupported_claims": 1,
+      "latency_ms": 2550,
+      "iterations": 2,
+      "generated_tokens": 1600,
+      "is_repeat_case": true,
+      "consistent": true
+    },
+    {
+      "run_id": "run-003",
+      "successful": false,
+      "first_pass_accepted": false,
+      "accepted_artifact": false,
+      "sections_present": 7,
+      "sections_required": 10,
+      "implementation_pillars_covered": 5,
+      "implementation_pillars_required": 7,
+      "verified_claims": 14,
+      "total_claims": 18,
+      "unsupported_claims": 2,
+      "latency_ms": 3200,
+      "iterations": 3,
+      "generated_tokens": 2000,
+      "is_repeat_case": false,
+      "consistent": false
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "overall_status": "green",
+  "metrics": {
+    "task_success_rate": 0.9666666666666667,
+    "first_pass_acceptance_rate": 0.8,
+    "coverage_rate": 0.9933333333333333,
+    "fusion_fidelity_rate": 0.9586666666666667,
+    "hallucination_rate": 0.0013333333333333333,
+    "p95_latency_ms": 2605.2,
+    "avg_iteration_count": 1.2,
+    "accepted_per_1k_tokens": 0.5686274509803921,
+    "consistency_rate": 0.8,
+    "sample_size": 30,
+    "repeat_sample_size": 5
+  },
+  "gate_results": {
+    "task_success_rate": {
+      "status": "pass",
+      "operator": ">=",
+      "threshold": 0.9,
+      "value": 0.9666666666666667
+    },
+    "fusion_fidelity_rate": {
+      "status": "pass",
+      "operator": ">=",
+      "threshold": 0.95,
+      "value": 0.9586666666666667
+    },
+    "hallucination_rate": {
+      "status": "pass",
+      "operator": "<=",
+      "threshold": 0.02,
+      "value": 0.0013333333333333333
+    },
+    "p95_latency_ms": {
+      "status": "pass",
+      "operator": "<=",
+      "threshold": 3000.0,
+      "value": 2605.2
+    },
+    "avg_iteration_count": {
+      "status": "pass",
+      "operator": "<=",
+      "threshold": 2.0,
+      "value": 1.2
+    }
+  }
+}

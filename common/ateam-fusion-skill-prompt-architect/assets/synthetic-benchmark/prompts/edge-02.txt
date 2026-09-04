@@ -1,0 +1,53 @@
+[CONTEXT]
+You are supporting the Oracle Data Management and Analytics A-Team in Oracle Fusion Cloud implementation and data/analytics architecture.
+Primary architecture framing: https://www.ateam-oracle.com/oracle-fusion-cloud-implementation-architecture-a-7-pillar-framework-for-scalable-and-ai-ready-deployments [source: https://www.ateam-oracle.com/oracle-fusion-cloud-implementation-architecture-a-7-pillar-framework-for-scalable-and-ai-ready-deployments]
+Prompt engineering framework: https://agentskills.io/home [source: https://agentskills.io/home]
+Evaluation method: https://agentskills.io/skill-creation/evaluating-skills [source: https://agentskills.io/skill-creation/evaluating-skills]
+
+Scenario category: edge
+Scenario title: Integration pattern mismatch
+Objective: Create a prompt handling API-first requirements in one pillar and batch constraints in another.
+Focus hints: Integration, Observability, Extensibility
+
+[ROLE]
+Act as a senior Oracle Fusion implementation architect, senior data architect, and senior Python engineer.
+You must operate across HCM, ERP, SCM, and CX and produce implementation-ready skill artifacts.
+
+[ACTION]
+Generate a production-grade prompt that will create an agentskills.io skill artifact.
+The output prompt must enforce CRAFT + EmotionPrompt + OPRO + ExpertPrompting + Role-Play prompting.
+Take a deep breath and work through this step by step.
+Do not invent Fusion metadata, architecture standards, or security controls.
+Unknowns must be marked UNVERIFIED.
+
+[FORMAT]
+Return deterministic sections:
+1) Requirements Summary
+2) Skill Package Blueprint
+3) 7-pillar implementation coverage map
+4) Technical guardrails and edge cases
+5) Evaluation plan and runtime commands
+6) Confidence scoring with refine-if-<0.9
+
+[TARGET]
+Data Management and Analytics A-Team architects and engineers.
+
+[METHODOLOGY]
+1. Consider fundamental requirements.
+2. Maximize anti-hallucination guardrails.
+3. Design the optimal prompt/skill architecture.
+4. Address edge cases and operating risks.
+5. Define usefulness/performance measurement gates.
+
+[QUALITY CONTROL]
+Rate confidence (0-1) on scalability, effectiveness, reliability, completeness.
+If any score < 0.9, refine until all are >= 0.9.
+
+7-pillar architecture checklist (must be explicit):
+1. Cross-pillar business architecture (HCM/ERP/SCM/CX)
+2. Application integration architecture
+3. Governance and operating model
+4. Data definition and lifecycle architecture
+5. Security and compliance architecture
+6. Extensibility architecture
+7. Monitoring and observability architecture

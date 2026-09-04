@@ -1,0 +1,30 @@
+# Data drift policy for Fusion BICC extracts.
+# Severity thresholds are expressed as absolute deltas or percentages.
+
+required_column_patterns:
+  - '.*_ID$'
+  - '^LAST_UPDATE_DATE$'
+
+row_count_drop:
+  critical_pct: 0.50
+  high_pct: 0.30
+  medium_pct: 0.15
+
+null_ratio_delta:
+  critical: 0.40
+  high: 0.25
+  medium: 0.10
+
+distinct_ratio_change:
+  critical: 0.70
+  high: 0.50
+  medium: 0.25
+
+numeric_mean_shift_pct:
+  critical: 1.00
+  high: 0.50
+  medium: 0.20
+
+categorical_top_values:
+  high_jaccard_below: 0.40
+  medium_jaccard_below: 0.60

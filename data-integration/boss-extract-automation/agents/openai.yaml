@@ -1,0 +1,5 @@
+interface:
+  display_name: "Boss Extract Automation"
+  short_description: "run and troubleshoot boss and tems extracts"
+  icon_small: "./assets/AteamIcon.jpeg"
+  icon_large: "./assets/AteamIcon.jpeg"

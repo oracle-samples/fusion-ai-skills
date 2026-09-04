@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fusion Prompt Benchmark Scorecard</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; background:#f6f8fb; color:#1f2937; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    h1, h2 { margin: 0 0 10px; }
+    .muted { color:#6b7280; font-size: 0.95rem; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin:16px 0; }
+    .card { background:white; border:1px solid #e5e7eb; border-radius:10px; padding:12px; box-shadow:0 1px 2px rgba(0,0,0,.03); }
+    .metric { font-size:1.3rem; font-weight:700; }
+    .status { font-weight:700; text-transform:uppercase; font-size:.8rem; padding:3px 8px; border-radius:999px; display:inline-block; }
+    .status.green { background:#dcfce7; color:#166534; }
+    .status.red { background:#fee2e2; color:#991b1b; }
+    .status.amber { background:#fef3c7; color:#92400e; }
+    .status.pass { background:#dcfce7; color:#166534; }
+    .status.fail { background:#fee2e2; color:#991b1b; }
+    .toolbar { background:white; border:1px solid #e5e7eb; border-radius:10px; padding:12px; display:grid; gap:10px; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); }
+    label { font-size:.8rem; color:#374151; display:block; margin-bottom:4px; }
+    input, select { width:100%; border:1px solid #d1d5db; border-radius:8px; padding:8px; font-size:.9rem; background:white; }
+    table { width:100%; border-collapse: collapse; background:white; border:1px solid #e5e7eb; margin-top:12px; }
+    th, td { border-bottom:1px solid #e5e7eb; padding:8px; text-align:left; font-size:.85rem; vertical-align:top; }
+    th { background:#f9fafb; position:sticky; top:0; z-index:1; }
+    th button { border:none; background:none; padding:0; font-weight:700; cursor:pointer; color:#111827; }
+    tbody tr:hover { background:#f9fafb; }
+    .table-wrap { max-height:65vh; overflow:auto; border-radius:10px; }
+    .small { font-size:.78rem; color:#6b7280; }
+    .pill { display:inline-block; border-radius:999px; padding:2px 8px; font-size:.75rem; background:#eef2ff; color:#3730a3; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fusion Skill Prompt Architect — Synthetic Benchmark Scorecard</h1>
+    <div class="muted">Browser report with filtering + sorting over 24 synthetic prompts (8 golden, 8 edge, 8 adversarial).</div>
+
+    <div class="grid" id="summaryCards"></div>
+
+    <div class="card">
+      <h2>Gate Results</h2>
+      <div id="gateResults"></div>
+      <div class="small" style="margin-top:8px;">Thresholds: <code id="thresholdsText"></code></div>
+    </div>
+
+    <div style="height:12px"></div>
+    <div class="toolbar">
+      <div>
+        <label>Search (run/prompt/title/objective)</label>
+        <input id="searchInput" placeholder="type to filter" />
+      </div>
+      <div>
+        <label>Category</label>
+        <select id="categoryFilter">
+          <option value="all">All</option>
+          <option value="golden">Golden</option>
+          <option value="edge">Edge</option>
+          <option value="adversarial">Adversarial</option>
+        </select>
+      </div>
+      <div>
+        <label>Run status</label>
+        <select id="statusFilter">
+          <option value="all">All</option>
+          <option value="pass">Pass</option>
+          <option value="fail">Fail</option>
+        </select>
+      </div>
+      <div>
+        <label>First-pass accepted</label>
+        <select id="firstPassFilter">
+          <option value="all">All</option>
+          <option value="true">True</option>
+          <option value="false">False</option>
+        </select>
+      </div>
+      <div>
+        <label>Min implementation coverage rate</label>
+        <input id="minImplCoverage" type="number" min="0" max="1" step="0.01" value="0" />
+      </div>
+      <div>
+        <label>Max hallucination rate</label>
+        <input id="maxHallucination" type="number" min="0" max="1" step="0.01" value="1" />
+      </div>
+    </div>
+
+    <div class="small" style="margin:8px 0;" id="rowCounter"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th><button data-sort="run_id">Run</button></th>
+            <th><button data-sort="prompt_id">Prompt</button></th>
+            <th><button data-sort="category">Category</button></th>
+            <th><button data-sort="title">Title</button></th>
+            <th><button data-sort="run_status">Status</button></th>
+            <th><button data-sort="first_pass_accepted">First Pass</button></th>
+            <th><button data-sort="coverage_rate">Coverage</button></th>
+            <th><button data-sort="implementation_coverage_rate">Impl Coverage</button></th>
+            <th><button data-sort="fusion_fidelity_rate">Fidelity</button></th>
+            <th><button data-sort="hallucination_rate">Hallucination</button></th>
+            <th><button data-sort="latency_ms">Latency ms</button></th>
+            <th><button data-sort="iterations">Iterations</button></th>
+            <th>Fail reasons</th>
+            <th>Prompt file</th>
+          </tr>
+        </thead>
+        <tbody id="runsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const SCORECARD = {"overall_status": "green", "metrics": {"task_success_rate": 1.0, "first_pass_acceptance_rate": 0.7083333333333334, "coverage_rate": 0.9444444444444444, "implementation_coverage_rate": 0.9880952380952381, "fusion_fidelity_rate": 0.9770114942528736, "hallucination_rate": 0.0028735632183908046, "p95_latency_ms": 2650.0, "avg_iteration_count": 1.6666666666666667, "accepted_per_1k_tokens": 0.6, "consistency_rate": 1.0, "sample_size": 24, "repeat_sample_size": 8}, "gate_results": {"task_success_rate": {"status": "pass", "operator": ">=", "threshold": 0.9, "value": 1.0}, "fusion_fidelity_rate": {"status": "pass", "operator": ">=", "threshold": 0.95, "value": 0.9770114942528736}, "implementation_coverage_rate": {"status": "pass", "operator": ">=", "threshold": 0.95, "value": 0.9880952380952381}, "hallucination_rate": {"status": "pass", "operator": "<=", "threshold": 0.02, "value": 0.0028735632183908046}, "p95_latency_ms": {"status": "pass", "operator": "<=", "threshold": 3000.0, "value": 2650.0}, "avg_iteration_count": {"status": "pass", "operator": "<=", "threshold": 2.0, "value": 1.6666666666666667}}};
+    const THRESHOLDS = {"task_success_rate_min": 0.9, "fusion_fidelity_rate_min": 0.95, "implementation_coverage_rate_min": 0.95, "hallucination_rate_max": 0.02, "p95_latency_ms_max": 3000, "avg_iteration_count_max": 2.0};
+    const CATEGORIES = {"golden": 8, "edge": 8, "adversarial": 8};
+    const GATE_DEFS = {"task_success_rate": {"label": "Task Success Rate", "definition": "Share of runs that produced an implementation-usable artifact.", "formula": "successful_runs / total_runs"}, "fusion_fidelity_rate": {"label": "Fusion Fidelity Rate", "definition": "Share of claims verified against trusted Fusion references.", "formula": "verified_claims / total_claims"}, "implementation_coverage_rate": {"label": "Implementation Coverage Rate", "definition": "Coverage of required implementation pillars (cross-pillar, integration, governance, data, security, extensibility, observability).", "formula": "implementation_pillars_covered / implementation_pillars_required"}, "hallucination_rate": {"label": "Hallucination Rate", "definition": "Share of unsupported key technical claims.", "formula": "unsupported_claims / total_key_claims"}, "p95_latency_ms": {"label": "P95 Latency (ms)", "definition": "95th percentile generation latency across runs.", "formula": "p95(latency_ms)"}, "avg_iteration_count": {"label": "Average Iteration Count", "definition": "Average number of revision loops required per run.", "formula": "sum(iterations) / run_count"}};
+    const RUN_ROWS = [{"run_id": "synthetic-001", "prompt_id": "golden-01", "category": "golden", "title": "ERP-HCM hire-to-retire architecture baseline", "objective": "Design a production-ready hire-to-retire Fusion architecture spanning HCM and ERP with governance and observability.", "focus": "Cross-pillar, Governance, Observability", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 1.0, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 1.0, "hallucination_rate": 0.0, "latency_ms": 1800.0, "iterations": 1.0, "generated_tokens": 1500.0, "consistent": true, "is_repeat_case": true, "prompt_file": "prompts/golden-01.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-002", "prompt_id": "golden-02", "category": "golden", "title": "ERP-SCM order-to-cash integration blueprint", "objective": "Generate a skill prompt for end-to-end O2C integration between ERP and SCM pillars with resilient interfaces.", "focus": "Integration, Security, Data lifecycle", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 1.0, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 1.0, "hallucination_rate": 0.0, "latency_ms": 1970.0, "iterations": 1.0, "generated_tokens": 1500.0, "consistent": true, "is_repeat_case": true, "prompt_file": "prompts/golden-02.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-003", "prompt_id": "golden-03", "category": "golden", "title": "CX-ERP revenue operations architecture", "objective": "Build a prompt for CX to ERP revenue orchestration with explicit ownership and release controls.", "focus": "Cross-pillar, Operating model, Extensibility", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 1.0, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 1.0, "hallucination_rate": 0.0, "latency_ms": 2140.0, "iterations": 1.0, "generated_tokens": 1500.0, "consistent": true, "is_repeat_case": true, "prompt_file": "prompts/golden-03.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-004", "prompt_id": "golden-04", "category": "golden", "title": "Fusion implementation governance operating model", "objective": "Create a prompt for enterprise governance and decision-rights across HCM/ERP/SCM/CX implementations.", "focus": "Governance, Security, Observability", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 1.0, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 1.0, "hallucination_rate": 0.0, "latency_ms": 2310.0, "iterations": 1.0, "generated_tokens": 1500.0, "consistent": true, "is_repeat_case": true, "prompt_file": "prompts/golden-04.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-005", "prompt_id": "golden-05", "category": "golden", "title": "Data definition and contract architecture", "objective": "Generate a prompt for canonical data contracts, lineage, and reconciliation across Fusion pillars.", "focus": "Data lifecycle, Integration, Governance", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 1.0, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 1.0, "hallucination_rate": 0.0, "latency_ms": 2480.0, "iterations": 1.0, "generated_tokens": 1500.0, "consistent": true, "is_repeat_case": true, "prompt_file": "prompts/golden-05.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-006", "prompt_id": "golden-06", "category": "golden", "title": "Security-first implementation architecture", "objective": "Produce a prompt for least-privilege and compliance-focused Fusion implementation design.", "focus": "Security, Governance, Cross-pillar", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 1.0, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 1.0, "hallucination_rate": 0.0, "latency_ms": 2650.0, "iterations": 1.0, "generated_tokens": 1500.0, "consistent": true, "is_repeat_case": true, "prompt_file": "prompts/golden-06.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-007", "prompt_id": "golden-07", "category": "golden", "title": "Upgrade-safe extensibility strategy", "objective": "Draft a prompt that balances Fusion extensibility needs with quarterly release safety.", "focus": "Extensibility, Governance, Observability", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 1.0, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 1.0, "hallucination_rate": 0.0, "latency_ms": 1800.0, "iterations": 1.0, "generated_tokens": 1500.0, "consistent": true, "is_repeat_case": true, "prompt_file": "prompts/golden-07.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-008", "prompt_id": "golden-08", "category": "golden", "title": "Unified monitoring and observability standard", "objective": "Build a prompt for SLO-backed observability design across all Fusion implementation pillars.", "focus": "Observability, Integration, Security", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 1.0, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 1.0, "hallucination_rate": 0.0, "latency_ms": 1970.0, "iterations": 1.0, "generated_tokens": 1500.0, "consistent": true, "is_repeat_case": true, "prompt_file": "prompts/golden-08.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-009", "prompt_id": "edge-01", "category": "edge", "title": "Conflicting ownership across pillars", "objective": "Generate a prompt that resolves conflicting data ownership between HCM and ERP stakeholders.", "focus": "Governance, Data lifecycle, Cross-pillar", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9655172413793104, "hallucination_rate": 0.0, "latency_ms": 2140.0, "iterations": 2.0, "generated_tokens": 1700.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/edge-01.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-010", "prompt_id": "edge-02", "category": "edge", "title": "Integration pattern mismatch", "objective": "Create a prompt handling API-first requirements in one pillar and batch constraints in another.", "focus": "Integration, Observability, Extensibility", "successful": true, "first_pass_accepted": false, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9655172413793104, "hallucination_rate": 0.0, "latency_ms": 2310.0, "iterations": 2.0, "generated_tokens": 1700.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/edge-02.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-011", "prompt_id": "edge-03", "category": "edge", "title": "Security masking versus analytics utility", "objective": "Design a prompt that balances security masking with analytics usability for cross-pillar reports.", "focus": "Security, Data lifecycle, ERP/SCM", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9655172413793104, "hallucination_rate": 0.0, "latency_ms": 2480.0, "iterations": 2.0, "generated_tokens": 1700.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/edge-03.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-012", "prompt_id": "edge-04", "category": "edge", "title": "Latency-cost conflict under quarterly close", "objective": "Generate a prompt where latency targets and cost limits are both strict and potentially conflicting.", "focus": "Observability, Governance, Integration", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9655172413793104, "hallucination_rate": 0.0, "latency_ms": 2650.0, "iterations": 2.0, "generated_tokens": 1700.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/edge-04.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-013", "prompt_id": "edge-05", "category": "edge", "title": "Extension rollback and release gate", "objective": "Build a prompt for extension rollback strategy when release readiness gates fail.", "focus": "Extensibility, Governance, Security", "successful": true, "first_pass_accepted": false, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9655172413793104, "hallucination_rate": 0.0, "latency_ms": 1800.0, "iterations": 2.0, "generated_tokens": 1700.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/edge-05.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-014", "prompt_id": "edge-06", "category": "edge", "title": "Incomplete source metadata scenario", "objective": "Create a prompt that handles missing endpoint/PVO metadata without hallucination.", "focus": "Data lifecycle, Integration, Hallucination control", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9655172413793104, "hallucination_rate": 0.0, "latency_ms": 1970.0, "iterations": 2.0, "generated_tokens": 1700.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/edge-06.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-015", "prompt_id": "edge-07", "category": "edge", "title": "Cross-region deployment with compliance constraints", "objective": "Generate a prompt for multi-region rollout with strict data residency and audit obligations.", "focus": "Security, Governance, Observability", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9655172413793104, "hallucination_rate": 0.0, "latency_ms": 2140.0, "iterations": 2.0, "generated_tokens": 1700.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/edge-07.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-016", "prompt_id": "edge-08", "category": "edge", "title": "No agreed escalation model", "objective": "Produce a prompt that requires ownership/escalation definition before observability can be considered complete.", "focus": "Observability, Operating model, Cross-pillar", "successful": true, "first_pass_accepted": false, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9655172413793104, "hallucination_rate": 0.0, "latency_ms": 2310.0, "iterations": 2.0, "generated_tokens": 1700.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/edge-08.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-017", "prompt_id": "adv-01", "category": "adversarial", "title": "Force unsupported metadata invention", "objective": "Generate a prompt that explicitly rejects unsupported requests to invent Fusion objects or APIs.", "focus": "Anti-hallucination, Security, Governance", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 0.8571428571428571, "fusion_fidelity_rate": 0.9642857142857143, "hallucination_rate": 0.0, "latency_ms": 2480.0, "iterations": 2.0, "generated_tokens": 1800.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/adv-01.txt", "run_status": "fail", "fail_reasons": ["implementation_coverage_rate"]}, {"run_id": "synthetic-018", "prompt_id": "adv-02", "category": "adversarial", "title": "Ambiguous scope spanning all pillars", "objective": "Create a prompt that converts vague scope into deterministic clarifying questions and output contracts.", "focus": "Cross-pillar, Governance, Method discipline", "successful": true, "first_pass_accepted": false, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9642857142857143, "hallucination_rate": 0.03571428571428571, "latency_ms": 2650.0, "iterations": 2.0, "generated_tokens": 1800.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/adv-02.txt", "run_status": "fail", "fail_reasons": ["hallucination_rate"]}, {"run_id": "synthetic-019", "prompt_id": "adv-03", "category": "adversarial", "title": "Conflicting architecture references", "objective": "Build a prompt that forces evidence ranking when references disagree across teams.", "focus": "Governance, Evidence, Integration", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9642857142857143, "hallucination_rate": 0.0, "latency_ms": 1800.0, "iterations": 2.0, "generated_tokens": 1800.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/adv-03.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-020", "prompt_id": "adv-04", "category": "adversarial", "title": "Unsafe customization pressure", "objective": "Generate a prompt that rejects non-upgrade-safe customizations and proposes extension-safe alternatives.", "focus": "Extensibility, Release safety, Security", "successful": true, "first_pass_accepted": false, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9642857142857143, "hallucination_rate": 0.0, "latency_ms": 1970.0, "iterations": 2.0, "generated_tokens": 1800.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/adv-04.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-021", "prompt_id": "adv-05", "category": "adversarial", "title": "Incomplete security assumptions", "objective": "Create a prompt that blocks final design when IAM or SoD assumptions are missing.", "focus": "Security, Governance, Auditability", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 0.8571428571428571, "fusion_fidelity_rate": 0.9642857142857143, "hallucination_rate": 0.0, "latency_ms": 2140.0, "iterations": 2.0, "generated_tokens": 1800.0, "consistent": false, "is_repeat_case": false, "prompt_file": "prompts/adv-05.txt", "run_status": "fail", "fail_reasons": ["implementation_coverage_rate"]}, {"run_id": "synthetic-022", "prompt_id": "adv-06", "category": "adversarial", "title": "Metric gaming attempt", "objective": "Build a prompt that requires measurable and falsifiable usefulness/performance metrics, not vanity KPIs.", "focus": "Evaluation, Observability, Governance", "successful": true, "first_pass_accepted": false, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9642857142857143, "hallucination_rate": 0.0, "latency_ms": 2310.0, "iterations": 2.0, "generated_tokens": 1800.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/adv-06.txt", "run_status": "pass", "fail_reasons": []}, {"run_id": "synthetic-023", "prompt_id": "adv-07", "category": "adversarial", "title": "Pillar omission attack", "objective": "Generate a prompt that detects and rejects outputs omitting any of the seven implementation pillars.", "focus": "Cross-pillar, Quality gate, Completeness", "successful": true, "first_pass_accepted": true, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9642857142857143, "hallucination_rate": 0.03571428571428571, "latency_ms": 2480.0, "iterations": 2.0, "generated_tokens": 1800.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/adv-07.txt", "run_status": "fail", "fail_reasons": ["hallucination_rate"]}, {"run_id": "synthetic-024", "prompt_id": "adv-08", "category": "adversarial", "title": "Bypass quality-control instruction", "objective": "Create a prompt that enforces confidence scoring and refine-if-below-threshold behavior despite bypass attempts.", "focus": "Quality control, Reliability, Process integrity", "successful": true, "first_pass_accepted": false, "accepted_artifact": true, "coverage_rate": 0.9166666666666666, "implementation_coverage_rate": 1.0, "fusion_fidelity_rate": 0.9642857142857143, "hallucination_rate": 0.0, "latency_ms": 2650.0, "iterations": 2.0, "generated_tokens": 1800.0, "consistent": true, "is_repeat_case": false, "prompt_file": "prompts/adv-08.txt", "run_status": "pass", "fail_reasons": []}];
+
+    const statusClass = (s) => s === 'green' || s === 'pass' ? 'green' : (s === 'red' || s === 'fail' ? 'red' : 'amber');
+
+    function promptHref(promptFile) {
+      if (!promptFile) return '';
+      if (promptFile.startsWith('file://') || /^https?:\/\//.test(promptFile)) return promptFile;
+      if (promptFile.startsWith('/')) return encodeURI(`file://${promptFile}`);
+      return encodeURI(promptFile);
+    }
+
+    function promptLink(promptFile) {
+      const href = promptHref(promptFile);
+      return href ? `<a href="${href}" target="_blank">open</a>` : '<span class="small">n/a</span>';
+    }
+
+    function pct(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return 'n/a';
+      return `${(v * 100).toFixed(2)}%`;
+    }
+
+    function num(v, d=2) {
+      if (v === null || v === undefined || Number.isNaN(v)) return 'n/a';
+      return Number(v).toFixed(d);
+    }
+
+    function formatGateValue(metric, value) {
+      if (value === null || value === undefined || Number.isNaN(value)) return 'n/a';
+      if (metric.endsWith('_rate')) return pct(value);
+      if (metric.includes('latency')) return `${num(value, 0)} ms`;
+      return num(value, 3);
+    }
+
+    function interpretation(metric, info) {
+      if (info.value === null || info.value === undefined || Number.isNaN(Number(info.value))) {
+        return 'Not evaluable: no metric value was available for this gate.';
+      }
+
+      const value = Number(info.value);
+      const threshold = Number(info.threshold);
+      const delta = info.operator === '>=' ? value - threshold : threshold - value;
+      const absDelta = Math.abs(delta);
+      const deltaText = metric.endsWith('_rate') ? pct(absDelta) : num(absDelta, metric.includes('latency') ? 0 : 3);
+
+      if (info.status === 'pass') {
+        if (info.operator === '>=') {
+          return `Pass: metric is above minimum gate by ${deltaText}.`;
+        }
+        return `Pass: metric is below maximum gate by ${deltaText}.`;
+      }
+
+      if (info.operator === '>=') {
+        return `Fail: metric is below required minimum by ${deltaText}. Improve control quality or coverage.`;
+      }
+      return `Fail: metric is above allowed maximum by ${deltaText}. Reduce risk/latency or raise quality controls.`;
+    }
+
+    function renderSummary() {
+      const cards = document.getElementById('summaryCards');
+      const metrics = SCORECARD.metrics || {};
+      const overall = SCORECARD.overall_status || 'amber';
+      const items = [
+        ['Overall status', overall.toUpperCase(), overall],
+        ['Task success rate', pct(metrics.task_success_rate), null],
+        ['Fusion fidelity rate', pct(metrics.fusion_fidelity_rate), null],
+        ['Implementation coverage rate', pct(metrics.implementation_coverage_rate), null],
+        ['Hallucination rate', pct(metrics.hallucination_rate), null],
+        ['p95 latency (ms)', num(metrics.p95_latency_ms, 0), null],
+        ['Avg iteration count', num(metrics.avg_iteration_count, 2), null],
+        ['Sample size', num(metrics.sample_size, 0), null],
+      ];
+      cards.innerHTML = items.map(([k,v,s]) => `
+        <div class="card">
+          <div class="small">${k}</div>
+          <div class="metric">${v}</div>
+          ${s ? `<span class="status ${statusClass(s)}">${s}</span>` : ''}
+        </div>
+      `).join('');
+
+      const gateResults = SCORECARD.gate_results || {};
+      const gateHtml = Object.entries(gateResults).map(([metric, info]) => `
+        <div class="card" style="margin:8px 0;">
+          <div><strong>${(GATE_DEFS[metric] && GATE_DEFS[metric].label) || metric}</strong> <span class="status ${statusClass(info.status)}">${info.status}</span></div>
+          <div class="small"><strong>Definition:</strong> ${(GATE_DEFS[metric] && GATE_DEFS[metric].definition) || 'n/a'}</div>
+          <div class="small"><strong>Formula:</strong> <code>${(GATE_DEFS[metric] && GATE_DEFS[metric].formula) || 'n/a'}</code></div>
+          <div class="small"><strong>Gate rule:</strong> value ${info.operator} ${formatGateValue(metric, info.threshold)}</div>
+          <div class="small"><strong>Observed value:</strong> ${formatGateValue(metric, info.value)}</div>
+          <div class="small"><strong>Interpretation:</strong> ${interpretation(metric, info)}</div>
+        </div>
+      `).join('');
+      document.getElementById('gateResults').innerHTML = gateHtml;
+      document.getElementById('thresholdsText').textContent = JSON.stringify(THRESHOLDS);
+    }
+
+    let sortKey = 'run_id';
+    let sortDir = 'asc';
+
+    function compare(a, b) {
+      const av = a[sortKey];
+      const bv = b[sortKey];
+      if (typeof av === 'number' && typeof bv === 'number') {
+        return sortDir === 'asc' ? av - bv : bv - av;
+      }
+      const aa = String(av ?? '');
+      const bb = String(bv ?? '');
+      return sortDir === 'asc' ? aa.localeCompare(bb) : bb.localeCompare(aa);
+    }
+
+    function passesFilters(row) {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      const category = document.getElementById('categoryFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const firstPass = document.getElementById('firstPassFilter').value;
+      const minImpl = Number(document.getElementById('minImplCoverage').value || 0);
+      const maxHall = Number(document.getElementById('maxHallucination').value || 1);
+
+      if (category !== 'all' && row.category !== category) return false;
+      if (status !== 'all' && row.run_status !== status) return false;
+      if (firstPass !== 'all' && String(row.first_pass_accepted) !== firstPass) return false;
+
+      const impl = Number(row.implementation_coverage_rate ?? 0);
+      const hall = Number(row.hallucination_rate ?? 0);
+      if (impl < minImpl) return false;
+      if (hall > maxHall) return false;
+
+      if (q) {
+        const blob = `${row.run_id} ${row.prompt_id} ${row.title} ${row.objective} ${row.focus}`.toLowerCase();
+        if (!blob.includes(q)) return false;
+      }
+      return true;
+    }
+
+    function renderRows() {
+      const body = document.getElementById('runsBody');
+      const rows = RUN_ROWS.filter(passesFilters).sort(compare);
+      body.innerHTML = rows.map((r) => `
+        <tr>
+          <td>${r.run_id}</td>
+          <td><span class="pill">${r.prompt_id}</span></td>
+          <td>${r.category}</td>
+          <td>
+            <div><strong>${r.title || ''}</strong></div>
+            <div class="small">${r.objective || ''}</div>
+          </td>
+          <td><span class="status ${statusClass(r.run_status)}">${r.run_status}</span></td>
+          <td>${r.first_pass_accepted}</td>
+          <td>${pct(r.coverage_rate)}</td>
+          <td>${pct(r.implementation_coverage_rate)}</td>
+          <td>${pct(r.fusion_fidelity_rate)}</td>
+          <td>${pct(r.hallucination_rate)}</td>
+          <td>${num(r.latency_ms, 0)}</td>
+          <td>${num(r.iterations, 0)}</td>
+          <td class="small">${(r.fail_reasons || []).join(', ') || 'none'}</td>
+          <td>${promptLink(r.prompt_file)}</td>
+        </tr>
+      `).join('');
+      document.getElementById('rowCounter').textContent = `Showing ${rows.length} of ${RUN_ROWS.length} runs | Categories: ${JSON.stringify(CATEGORIES)}`;
+    }
+
+    function bind() {
+      ['searchInput','categoryFilter','statusFilter','firstPassFilter','minImplCoverage','maxHallucination'].forEach((id) => {
+        const el = document.getElementById(id);
+        el.addEventListener('input', renderRows);
+        el.addEventListener('change', renderRows);
+      });
+
+      document.querySelectorAll('th button[data-sort]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const key = btn.getAttribute('data-sort');
+          if (sortKey === key) {
+            sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+          } else {
+            sortKey = key;
+            sortDir = 'asc';
+          }
+          renderRows();
+        });
+      });
+    }
+
+    renderSummary();
+    bind();
+    renderRows();
+  </script>
+</body>
+</html>

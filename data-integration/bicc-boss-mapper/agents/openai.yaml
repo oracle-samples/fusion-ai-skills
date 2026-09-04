@@ -1,0 +1,13 @@
+interface:
+  display_name: BICC BOSS Mapper
+  short_description: Map Oracle BICC PVOs to BOSS Business Views and export column
+    mappings.
+  icon_small: "./assets/AteamIcon.jpeg"
+  icon_large: "./assets/AteamIcon.jpeg"
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

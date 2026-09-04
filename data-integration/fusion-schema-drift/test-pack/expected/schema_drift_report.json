@@ -1,0 +1,81 @@
+{
+  "report_type": "schema_drift",
+  "generated_at": "2026-04-24T12:45:58.331129+00:00",
+  "mode": "combined",
+  "summary": {
+    "total_findings": 5,
+    "counts_by_severity": {
+      "critical": 4,
+      "high": 1,
+      "medium": 0,
+      "low": 0,
+      "info": 0
+    },
+    "critical_findings": 4
+  },
+  "findings": [
+    {
+      "mode": "source_drift",
+      "drift_type": "column_type_changed",
+      "severity": "critical",
+      "object": "AP_INVOICES",
+      "column": "AMOUNT",
+      "message": "Column AMOUNT type changed in AP_INVOICES: number -> string.",
+      "business_impact": "Metric semantics and business logic may change.",
+      "pipeline_impact": "Type coercion failures can break transforms or ingestion jobs.",
+      "recommended_action": "Update transform casts and AI DP contract type mappings.",
+      "auto_apply_allowed": false,
+      "details": {
+        "transition": "number->string"
+      }
+    },
+    {
+      "mode": "target_contract",
+      "drift_type": "type_mismatch",
+      "severity": "critical",
+      "object": "AP_INVOICES",
+      "column": "AMOUNT",
+      "message": "Type mismatch in AP_INVOICES.AMOUNT: source=string, target=number.",
+      "business_impact": "Loaded values may be rejected or semantically corrupted.",
+      "pipeline_impact": "Load failures likely without explicit casting rules.",
+      "recommended_action": "Add deterministic cast/format transform before loading to ODT.",
+      "auto_apply_allowed": false
+    },
+    {
+      "mode": "source_drift",
+      "drift_type": "column_removed",
+      "severity": "critical",
+      "object": "AP_INVOICES",
+      "column": "INVOICE_ID",
+      "message": "Column INVOICE_ID was removed from object AP_INVOICES.",
+      "business_impact": "Required attributes may disappear from analytical datasets.",
+      "pipeline_impact": "Mappings referencing this column will fail.",
+      "recommended_action": "Create transform fallback or restore column extraction before deployment.",
+      "auto_apply_allowed": false
+    },
+    {
+      "mode": "target_contract",
+      "drift_type": "type_mismatch",
+      "severity": "critical",
+      "object": "AP_INVOICES",
+      "column": "SUPPLIER_ID",
+      "message": "Type mismatch in AP_INVOICES.SUPPLIER_ID: source=integer, target=number.",
+      "business_impact": "Loaded values may be rejected or semantically corrupted.",
+      "pipeline_impact": "Load failures likely without explicit casting rules.",
+      "recommended_action": "Add deterministic cast/format transform before loading to ODT.",
+      "auto_apply_allowed": false
+    },
+    {
+      "mode": "target_contract",
+      "drift_type": "missing_optional_column",
+      "severity": "high",
+      "object": "AP_INVOICES",
+      "column": "INVOICE_ID",
+      "message": "Target column INVOICE_ID in AP_INVOICES is not present in current extraction.",
+      "business_impact": "Required target attributes may not load.",
+      "pipeline_impact": "Contract mismatch can halt load pipelines.",
+      "recommended_action": "Add source mapping or revise target schema contract.",
+      "auto_apply_allowed": false
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "required_column_patterns": [
+    ".*_ID$",
+    "^LAST_UPDATE_DATE$"
+  ],
+  "row_count_drop": {
+    "critical_pct": 0.5,
+    "high_pct": 0.3,
+    "medium_pct": 0.15
+  },
+  "null_ratio_delta": {
+    "critical": 0.4,
+    "high": 0.25,
+    "medium": 0.1
+  },
+  "distinct_ratio_change": {
+    "critical": 0.7,
+    "high": 0.5,
+    "medium": 0.25
+  },
+  "numeric_mean_shift_pct": {
+    "critical": 1.0,
+    "high": 0.5,
+    "medium": 0.2
+  },
+  "categorical_top_values": {
+    "high_jaccard_below": 0.4,
+    "medium_jaccard_below": 0.6
+  }
+}
