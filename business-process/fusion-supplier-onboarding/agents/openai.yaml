@@ -1,0 +1,12 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl
+
+interface:
+  display_name: "Supplier Onboarding"
+  short_description: "Oracle Fusion supplier onboarding deliverables"
+  icon_small: "./assets/AteamIcon.jpeg"
+  icon_large: "./assets/AteamIcon.jpeg"
+  default_prompt: "Use $supplier-onboarding to create a control-aware Oracle Fusion Supplier Onboarding deliverable."
+policy:
+  # Sensitive supplier-data workflows require explicit skill invocation.
+  allow_implicit_invocation: false

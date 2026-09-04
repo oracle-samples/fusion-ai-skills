@@ -1,0 +1,6 @@
+interface:
+  display_name: "A-Team Fusion Integration Design Assistant"
+  short_description: "Create OIC integration designs."
+  icon_small: "./assets/AteamIcon.jpeg"
+  icon_large: "./assets/AteamIcon.jpeg"
+  default_prompt: "Use $fusion-integration-design-assistant to turn this business requirement into an OIC integration design in Markdown and PDF with relevant A-Team references."

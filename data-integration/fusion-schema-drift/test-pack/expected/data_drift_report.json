@@ -1,0 +1,186 @@
+{
+  "report_type": "data_drift",
+  "generated_at": "2026-04-24T12:45:58.553199+00:00",
+  "summary": {
+    "total_findings": 12,
+    "counts_by_severity": {
+      "critical": 4,
+      "high": 8,
+      "medium": 0,
+      "low": 0,
+      "info": 0
+    },
+    "critical_findings": 4
+  },
+  "findings": [
+    {
+      "drift_type": "row_count_drop",
+      "severity": "critical",
+      "object": "AP_INVOICES",
+      "column": null,
+      "message": "Row count dropped for AP_INVOICES: baseline=8, current=3.",
+      "business_impact": "Potential under-reporting and incomplete subject area coverage.",
+      "pipeline_impact": "May breach load completeness/freshness SLAs.",
+      "recommended_action": "Check extraction filters, incremental watermark logic, and source job status.",
+      "auto_apply_allowed": false,
+      "details": {
+        "drop_pct": 0.625
+      }
+    },
+    {
+      "drift_type": "numeric_mean_shift",
+      "severity": "critical",
+      "object": "AP_INVOICES",
+      "column": "AMOUNT",
+      "message": "Numeric mean shifted for AP_INVOICES.AMOUNT: baseline=1118.3500, current=2550.0000.",
+      "business_impact": "Measure distribution shifts can indicate semantic source changes.",
+      "pipeline_impact": "Downstream model calibration and anomaly alerts may drift.",
+      "recommended_action": "Validate business meaning and refresh model/aggregation baselines.",
+      "auto_apply_allowed": false,
+      "details": {
+        "mean_shift_pct": 1.2801448562614568
+      }
+    },
+    {
+      "drift_type": "distinct_count_shift",
+      "severity": "critical",
+      "object": "AP_INVOICES",
+      "column": "SUPPLIER_ID",
+      "message": "Distinct count shifted for AP_INVOICES.SUPPLIER_ID: baseline=8, current=1.",
+      "business_impact": "Category coverage changes can impact segmentation and trend analysis.",
+      "pipeline_impact": "Dimension mapping and surrogate key joins may degrade.",
+      "recommended_action": "Review source domain changes and update reference mappings.",
+      "auto_apply_allowed": false,
+      "details": {
+        "distinct_ratio_change": 0.875
+      }
+    },
+    {
+      "drift_type": "null_ratio_increase",
+      "severity": "critical",
+      "object": "AP_INVOICES",
+      "column": "SUPPLIER_ID",
+      "message": "Null ratio increased for AP_INVOICES.SUPPLIER_ID: baseline=0.0000, current=0.6667.",
+      "business_impact": "Data completeness degradation can distort KPI outcomes.",
+      "pipeline_impact": "NOT NULL targets or quality checks may fail.",
+      "recommended_action": "Apply null defaulting/imputation or fix source extraction logic.",
+      "auto_apply_allowed": false,
+      "details": {
+        "null_ratio_delta": 0.6666666666666666,
+        "required_column": true
+      }
+    },
+    {
+      "drift_type": "categorical_domain_shift",
+      "severity": "high",
+      "object": "AP_INVOICES",
+      "column": "AMOUNT",
+      "message": "Categorical top-value overlap dropped for AP_INVOICES.AMOUNT: jaccard=0.0000.",
+      "business_impact": "Domain-level changes can alter cohort behavior and reporting slices.",
+      "pipeline_impact": "Lookup/reference mapping coverage may become incomplete.",
+      "recommended_action": "Review new/removed domain values and update mapping tables.",
+      "auto_apply_allowed": false,
+      "details": {
+        "jaccard_similarity": 0.0
+      }
+    },
+    {
+      "drift_type": "distinct_count_shift",
+      "severity": "high",
+      "object": "AP_INVOICES",
+      "column": "AMOUNT",
+      "message": "Distinct count shifted for AP_INVOICES.AMOUNT: baseline=8, current=3.",
+      "business_impact": "Category coverage changes can impact segmentation and trend analysis.",
+      "pipeline_impact": "Dimension mapping and surrogate key joins may degrade.",
+      "recommended_action": "Review source domain changes and update reference mappings.",
+      "auto_apply_allowed": false,
+      "details": {
+        "distinct_ratio_change": 0.625
+      }
+    },
+    {
+      "drift_type": "categorical_domain_shift",
+      "severity": "high",
+      "object": "AP_INVOICES",
+      "column": "INVOICE_DATE",
+      "message": "Categorical top-value overlap dropped for AP_INVOICES.INVOICE_DATE: jaccard=0.0000.",
+      "business_impact": "Domain-level changes can alter cohort behavior and reporting slices.",
+      "pipeline_impact": "Lookup/reference mapping coverage may become incomplete.",
+      "recommended_action": "Review new/removed domain values and update mapping tables.",
+      "auto_apply_allowed": false,
+      "details": {
+        "jaccard_similarity": 0.0
+      }
+    },
+    {
+      "drift_type": "distinct_count_shift",
+      "severity": "high",
+      "object": "AP_INVOICES",
+      "column": "INVOICE_DATE",
+      "message": "Distinct count shifted for AP_INVOICES.INVOICE_DATE: baseline=8, current=3.",
+      "business_impact": "Category coverage changes can impact segmentation and trend analysis.",
+      "pipeline_impact": "Dimension mapping and surrogate key joins may degrade.",
+      "recommended_action": "Review source domain changes and update reference mappings.",
+      "auto_apply_allowed": false,
+      "details": {
+        "distinct_ratio_change": 0.625
+      }
+    },
+    {
+      "drift_type": "categorical_domain_shift",
+      "severity": "high",
+      "object": "AP_INVOICES",
+      "column": "INVOICE_ID",
+      "message": "Categorical top-value overlap dropped for AP_INVOICES.INVOICE_ID: jaccard=0.0000.",
+      "business_impact": "Domain-level changes can alter cohort behavior and reporting slices.",
+      "pipeline_impact": "Lookup/reference mapping coverage may become incomplete.",
+      "recommended_action": "Review new/removed domain values and update mapping tables.",
+      "auto_apply_allowed": false,
+      "details": {
+        "jaccard_similarity": 0.0
+      }
+    },
+    {
+      "drift_type": "distinct_count_shift",
+      "severity": "high",
+      "object": "AP_INVOICES",
+      "column": "INVOICE_ID",
+      "message": "Distinct count shifted for AP_INVOICES.INVOICE_ID: baseline=8, current=3.",
+      "business_impact": "Category coverage changes can impact segmentation and trend analysis.",
+      "pipeline_impact": "Dimension mapping and surrogate key joins may degrade.",
+      "recommended_action": "Review source domain changes and update reference mappings.",
+      "auto_apply_allowed": false,
+      "details": {
+        "distinct_ratio_change": 0.625
+      }
+    },
+    {
+      "drift_type": "numeric_mean_shift",
+      "severity": "high",
+      "object": "AP_INVOICES",
+      "column": "INVOICE_ID",
+      "message": "Numeric mean shifted for AP_INVOICES.INVOICE_ID: baseline=1004.5000, current=2002.0000.",
+      "business_impact": "Measure distribution shifts can indicate semantic source changes.",
+      "pipeline_impact": "Downstream model calibration and anomaly alerts may drift.",
+      "recommended_action": "Validate business meaning and refresh model/aggregation baselines.",
+      "auto_apply_allowed": false,
+      "details": {
+        "mean_shift_pct": 0.9930313588850174
+      }
+    },
+    {
+      "drift_type": "categorical_domain_shift",
+      "severity": "high",
+      "object": "AP_INVOICES",
+      "column": "SUPPLIER_ID",
+      "message": "Categorical top-value overlap dropped for AP_INVOICES.SUPPLIER_ID: jaccard=0.0000.",
+      "business_impact": "Domain-level changes can alter cohort behavior and reporting slices.",
+      "pipeline_impact": "Lookup/reference mapping coverage may become incomplete.",
+      "recommended_action": "Review new/removed domain values and update mapping tables.",
+      "auto_apply_allowed": false,
+      "details": {
+        "jaccard_similarity": 0.0
+      }
+    }
+  ]
+}

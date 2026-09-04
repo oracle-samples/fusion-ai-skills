@@ -1,0 +1,50 @@
+spec_version: "0.0.1"
+contract_id: "fusion_entity_pipeline_contract"
+contract_version: "0.1.0"
+owners:
+  data_product_owner: "UNVERIFIED"
+  technical_owner: "UNVERIFIED"
+source:
+  system: "oracle_fusion"
+  extraction_mode: "UNVERIFIED"  # REST | BICC | OTBI
+  artifact_name: "UNVERIFIED"
+  release_context: "UNVERIFIED"
+target:
+  platform: "oci_adb_or_other"
+  dataset: "UNVERIFIED"
+  publish_mode: "snapshot_or_incremental"
+schema:
+  fields:
+    - name: "UNVERIFIED"
+      data_type: "UNVERIFIED"
+      nullable: true
+      semantic_definition: "UNVERIFIED"
+quality_rules:
+  - rule_id: "not_null_primary_key"
+    type: "not_null"
+    field: "UNVERIFIED"
+  - rule_id: "unique_business_key"
+    type: "unique"
+    field: "UNVERIFIED"
+freshness_slo:
+  max_data_lag_minutes: 60
+compatibility_policy:
+  major_breaking_requires_approval: true
+  backward_compatible_minor_allowed: true
+  patch_non_breaking_only: true
+security:
+  classification: "UNVERIFIED"
+  masking_policy: "UNVERIFIED"
+  least_privilege_role: "UNVERIFIED"
+operational:
+  retry_policy:
+    max_attempts: 3
+    backoff_seconds: [30, 90, 180]
+  recovery_points:
+    - extract_complete
+    - stage_validated
+    - transform_complete
+    - publish_complete
+acceptance:
+  contract_validation_required: true
+  blocking_on_quality_failure: true
