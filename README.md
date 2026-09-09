@@ -1,3 +1,5 @@
+TEST OGHO template checks and OCA - do not merge
+
 # Fusion AI Skills
 
 This repository contains reusable Oracle Fusion AI agent skills. Skills package domain-specific instructions, reference material, examples, assets, and optional automation to help architects and delivery teams design and implement Oracle Fusion solutions consistently.
